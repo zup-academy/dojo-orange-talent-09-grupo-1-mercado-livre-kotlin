@@ -2,6 +2,7 @@ package br.com.zup.edu.mercadolivrekotlin.usuario
 
 import com.google.gson.Gson
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.NullAndEmptySource
@@ -63,5 +64,14 @@ internal class UsuarioControllerTest {
             .contentType(MediaType.APPLICATION_JSON).content(gson.toJson(usuarioRequest)))
             .andExpect(MockMvcResultMatchers.status().isBadRequest)
     }
+
+
+//    fun `Não deve aceitar login nulo e assim retornar status 400 ` () {
+//        val usuarioRequest = UsuarioRequest(null, "123456")
+//
+//        mock.perform(MockMvcRequestBuilders.post(uri)
+//            .contentType(MediaType.APPLICATION_JSON).content(gson.toJson(usuarioRequest)))
+//            .andExpect(MockMvcResultMatchers.status().isBadRequest)
+//    }
 }
 
