@@ -12,9 +12,6 @@ data class UsuarioRequest(
     @field:NotBlank @field:Size(min = 6) val senha: String
 ) {
 
-    fun paraUsuario(): Usuario {
-
-        return Usuario(login, BCrypt.hashpw(senha, BCrypt.gensalt()))
-    }
+    fun paraUsuario() = Usuario(login, BCrypt.hashpw(senha, BCrypt.gensalt()))
 
 }

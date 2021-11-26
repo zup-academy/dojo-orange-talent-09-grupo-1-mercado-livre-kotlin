@@ -2,14 +2,13 @@ package br.com.zup.edu.mercadolivrekotlin.usuario
 
 import com.sun.istack.NotNull
 import java.time.LocalDateTime
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
+import javax.persistence.*
 
 @Entity
 class Usuario (
+    @Column(nullable = false)
     val login: String,
+    @Column(nullable = false)
     val senha: String,
         ){
 
