@@ -9,11 +9,12 @@ class Usuario (
     @Column(nullable = false)
     val login: String,
     @Column(nullable = false)
-    val senha: String,
+    var senha: String,
         ){
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null
+
     val instante: LocalDateTime = LocalDateTime.now()
 }

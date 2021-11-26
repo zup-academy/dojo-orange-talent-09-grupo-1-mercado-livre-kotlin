@@ -1,7 +1,11 @@
 package br.com.zup.edu.mercadolivrekotlin.usuario
 
+import com.google.gson.Gson
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.NullAndEmptySource
+import org.junit.jupiter.params.provider.ValueSource
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
@@ -20,15 +24,44 @@ internal class UsuarioControllerTest {
     @Autowired
     lateinit var mock: MockMvc
 
+    @Autowired
+    lateinit var gson: Gson
+
     @Test
     fun deveCadastrarUmNovoUsuarioQuandoAsInformacoesSaoValidasERetornarStatus200() {
-
         val usuarioRequest = UsuarioRequest("natacha.amigona@gmail.com", "123456")
-        val json = "{ \"login\" : \"natacha.amigona@gmail.com\", \"123456\"}"
 
         mock.perform(MockMvcRequestBuilders.post(uri)
-            .contentType(MediaType.APPLICATION_JSON).content(/*TODO preencher o content con usuarioRequest*/))
+            .contentType(MediaType.APPLICATION_JSON).content(gson.toJson(usuarioRequest)))
             .andExpect(MockMvcResultMatchers.status().isOk)
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = ["igor.amigaoemail.com", "igor@.com"])
+    fun deveRetornarStatus400QuandoUmUsuarioTiverEmailInvalido(email: String) {
+        val usuarioRequest = UsuarioRequest(email, "123456")
+
+        mock.perform(MockMvcRequestBuilders.post(uri)
+            .contentType(MediaType.APPLICATION_JSON).content(gson.toJson(usuarioRequest)))
+            .andExpect(MockMvcResultMatchers.status().isBadRequest)
+    }
+
+    @Test
+    fun deveRetornarStatus400QuandoUmUsuarioTiverSenhaInferiorA6Caracteres() {
+        val usuarioRequest = UsuarioRequest("carlos.amigao@email.com", "12345")
+
+        mock.perform(MockMvcRequestBuilders.post(uri)
+            .contentType(MediaType.APPLICATION_JSON).content(gson.toJson(usuarioRequest)))
+            .andExpect(MockMvcResultMatchers.status().isBadRequest)
+    }
+
+    @Test
+    fun deveRetornarStatus400QuandoUmUsuarioTiverEmailVazio() {
+        val usuarioRequest = UsuarioRequest("", "123456")
+
+        mock.perform(MockMvcRequestBuilders.post(uri)
+            .contentType(MediaType.APPLICATION_JSON).content(gson.toJson(usuarioRequest)))
+            .andExpect(MockMvcResultMatchers.status().isBadRequest)
     }
 }
 
